@@ -12,10 +12,9 @@ resource storage 'microsoft.storage/storageAccounts@2025-01-10' = {
   location: location
   sku: {
     name: 'standard_LRS'
-
+  }
   kind: 'storagev2'
   properties: {} 
-
 }
 
 resource vnet 'Microsoft.Network/virtualNetworks@2025-02-02' = {
@@ -39,35 +38,33 @@ resource vnet 'Microsoft.Network/virtualNetworks@2025-02-02' = {
 
     }
     
-  }
-
-  resource aks 'Microsoft.containerservice/managedClusters@2024-02-02-preview' = { 
+    }
+  
+  
+  
+  resource aks 'Microsoft.containerservice/managedClusters@2024-02-02-preview' = {
     name: aksName
     location: location
     identity: {
-      type: 'systemAssigned' 
+      type: 'SystemAssigned'
     }
     properties: {
-      dnsprefix: dnsprefix 
+      dnsPrefix: dnsprefix
       enableRBAC: true
       kubernetesVersion: '1.29.2'
-      agentpoolprofiles: [
+      agentPoolProfiles: [
         {
           name: 'systempool'
-          vmSize: 'standard_DS3_v2'
-          count: 3 
-          mode: 'system' 
-          vnetsubnetId: vnet::subnets[0].id
+          vmSize: 'Standard_DS3_v2'
+          count: 3
+          mode: 'System'
+          vnetSubnetId: vnet.properties.subnets[0].id
         }
       ]
-      networkprofile: {
-        networkplugin: 'azure'
-        networkpolicy: 'azure'
+      networkProfile: {
+        networkPlugin: 'azure'
+        networkPolicy: 'azure'
       }
-
     }
-
-    
   }
-
    
